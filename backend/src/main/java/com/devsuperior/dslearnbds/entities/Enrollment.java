@@ -1,10 +1,13 @@
 package com.devsuperior.dslearnbds.entities;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.devsuperior.dslearnbds.entities.pk.EnrollmentPK;
@@ -24,6 +27,9 @@ public class Enrollment {
 	
 	private boolean available;
 	private boolean onlyUpdate; //Verifica se é um aluno normal(Quando tem suporte) ou de atualização(Sem suporte).
+	
+	@ManyToMany(mappedBy = "enrollmentsDone") // Nome do atributo associado
+	private Set<Lesson> lessonsDone = new HashSet<>(); // Mapeamento para identificar quais usuários concluiram as lessons
 	
 	public Enrollment() {
 		
