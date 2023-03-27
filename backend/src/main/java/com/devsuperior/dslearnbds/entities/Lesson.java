@@ -1,7 +1,9 @@
 package com.devsuperior.dslearnbds.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -15,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 //Esta classe ou ela vai ser Content ou Task (Abstract)
@@ -49,6 +52,12 @@ public abstract class Lesson implements Serializable{
 		}
 	)
 	private Set<Enrollment> enrollmentsDone = new HashSet<>(); //Não adiciona a coleção em construtor e gerar apenas o get sem o set
+	
+	//Mapeamento da classe Deliver
+	@OneToMany(mappedBy = "lesson")
+	private List<Deliver> deliveries = new ArrayList<>();
+	
+	
 	
 	public Lesson() {
 		
@@ -97,11 +106,18 @@ public abstract class Lesson implements Serializable{
 	public Set<Enrollment> getEnrollmentsDone() {
 		return enrollmentsDone;
 	}
+	
+	//Apenas o get da lista - classe Deliver
+	public List<Deliver> getDeliveries() {
+		return deliveries;
+	}
 
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
 	}
+
+	
 
 	@Override
 	public boolean equals(Object obj) {

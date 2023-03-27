@@ -1,13 +1,17 @@
 package com.devsuperior.dslearnbds.entities;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.devsuperior.dslearnbds.entities.pk.EnrollmentPK;
@@ -30,6 +34,9 @@ public class Enrollment {
 	
 	@ManyToMany(mappedBy = "enrollmentsDone") // Nome do atributo associado
 	private Set<Lesson> lessonsDone = new HashSet<>(); // Mapeamento para identificar quais usuários concluiram as lessons
+	
+	@OneToMany(mappedBy = "enrollment") //Mapeamento classe Deliver
+	private List<Deliver> deliveries = new ArrayList<>();
 	
 	public Enrollment() {
 		
@@ -111,6 +118,32 @@ public class Enrollment {
 	public void setOnlyUpdate(boolean onlyUpdate) {
 		this.onlyUpdate = onlyUpdate;
 	}
+
+	//Apenas o get da lista - classe Deliver
+	public List<Deliver> getDeliveries() {
+		return deliveries;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Enrollment other = (Enrollment) obj;
+		return Objects.equals(id, other.id);
+	}
+	
+	
+	
+	
 	
 	
 	
