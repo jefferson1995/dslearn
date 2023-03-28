@@ -2,7 +2,9 @@ package com.devsuperior.dslearnbds.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -15,6 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -48,12 +51,21 @@ public class Topic implements Serializable {
 	@JoinColumn(name = "lesson_id")
 	private Lesson lesson;
 	
+	//Mapeamento classe Reply
+	@ManyToOne
+	@JoinColumn(name = "reply_id")
+	private Reply answer;
+	
 	//Mapeamento com a classe user para identificar os usuários que deram like
 	@ManyToMany
 	@JoinTable(name = "tb_topic_likes",
 		joinColumns = @JoinColumn(name = "topic_id"),
 		inverseJoinColumns = @JoinColumn(name = "user_id"))	
 	private Set<User> likes = new HashSet<>();
+	
+	//Mapeamento topic classe Reply
+	@OneToMany(mappedBy = "topic")
+	private List<Reply> replies = new ArrayList<>();
 	
 	public Topic() {
 		
@@ -134,6 +146,20 @@ public class Topic implements Serializable {
 
 	public void setLikes(Set<User> likes) {
 		this.likes = likes;
+	}
+	
+	//Classe reply
+
+	public Reply getAnswer() {
+		return answer;
+	}
+
+	public void setAnswer(Reply answer) {
+		this.answer = answer;
+	}
+
+	public List<Reply> getReplies() {
+		return replies;
 	}
 
 	@Override
