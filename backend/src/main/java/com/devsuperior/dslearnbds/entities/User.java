@@ -2,6 +2,7 @@ package com.devsuperior.dslearnbds.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -18,9 +19,12 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 @Entity
 @Table(name = "tb_user")
-public class User implements Serializable {
+public class User implements UserDetails, Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -112,5 +116,42 @@ public class User implements Serializable {
 		User other = (User) obj;
 		return id == other.id;
 	}
+	
+	@Override
+	public String getUsername() {
+		// retorna o e-mail do usuário 
+		return email;
+	}
+
+	@Override     //Verifica se a conta não está expirada
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override		//Verfiica se a conta não está bloqueada
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override		// Verifica se a senha não está expirada
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override		//Verifica se o usuário está habilitado
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 
 }
