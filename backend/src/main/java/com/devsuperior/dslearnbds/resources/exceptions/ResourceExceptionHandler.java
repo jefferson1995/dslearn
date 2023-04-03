@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.devsuperior.dslearnbds.services.exceptions.DatabaseException;
+import com.devsuperior.dslearnbds.services.exceptions.ForbiddenException;
 import com.devsuperior.dslearnbds.services.exceptions.ResourceNotFoundException;
+import com.devsuperior.dslearnbds.services.exceptions.UnauthorizedException;
 
 @ControllerAdvice  // esta anotação que agora faz o tratamento do erro
 public class ResourceExceptionHandler {
@@ -65,5 +67,25 @@ public class ResourceExceptionHandler {
 		}
 		
 		return ResponseEntity.status(status).body(err);
+	}
+	
+	//Tratamentos customizados
+	
+	//403
+	@ExceptionHandler(ForbiddenException.class) //Para que ele saiba o tipo de exception que vai interroper
+	public ResponseEntity<OAuthCustomError> forbidden(ForbiddenException e, HttpServletRequest request){ //tipo que será retornado OAuthCustomError
+		
+		OAuthCustomError err = new OAuthCustomError("Forbidden", e.getMessage()); //Objeto da resposta
+		
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(err);
+	}
+	
+	//401
+	@ExceptionHandler(UnauthorizedException.class) //Para que ele saiba o tipo de exception que vai interroper
+	public ResponseEntity<OAuthCustomError> unauthorized(UnauthorizedException e, HttpServletRequest request){ //tipo que será retornado OAuthCustomError
+		
+		OAuthCustomError err = new OAuthCustomError("Forbidden", e.getMessage()); //Objeto da resposta
+		
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(err);
 	}
 }

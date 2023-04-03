@@ -153,5 +153,14 @@ public class User implements UserDetails, Serializable {
 		return null;
 	}
 	
+	//Percorre a lista de perfis(role) e verifica se o usuário tem o admin
+	public boolean hasHole(String roleName) {
+		for(Role role: roles) {
+			if(role.getAuthority().equals(roleName)) {
+				return true;
+			}
+		}
+		return false;
+	}	
 
 }
