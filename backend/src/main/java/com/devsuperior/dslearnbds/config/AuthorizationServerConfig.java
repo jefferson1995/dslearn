@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -48,6 +49,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	
 	@Autowired
 	private JwtTokenEnhancer tokenEnhancer; //Para adicionar informações no token ex. nome e id do usuário
+	
+	@Autowired
+	private UserDetailsService userDetailsService;
 
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
@@ -60,8 +64,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		.withClient(clientId) //define o id da aplicação
 		.secret(passwordEncoder.encode(clientSecret)) //senha da aplicação
 		.scopes("read", "write") //Para dizer que será um acesso de leitura e escrita
-		.authorizedGrantTypes("password") //varios tipos de acesso login
-		.accessTokenValiditySeconds(jwtDuration); //24 horas de validade
+		.authorizedGrantTypes("password", "refresh_token") //varios tipos de acesso login, também aceita refresh token
+		.accessTokenValiditySeconds(jwtDuration) //24 horas de validade
+		.refreshTokenValiditySeconds(jwtDuration); //Tempo refresh token
 	}
 
 	@Override //Informa quem vai autorizar e qual vai ser o formato do token
@@ -74,7 +79,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		endpoints.authenticationManager(authenticationManager)  //Processa a autenticação -> configurado na classe websecuityconfig
 		.tokenStore(tokenStore)     //Objeto responsável para processar o token 
 		.accessTokenConverter(accessTokenConverter) //registra a chave -> definido na classe appConfig
-		.tokenEnhancer(chain); //para adicionar o chain id e nome usuário
+		.tokenEnhancer(chain) //para adicionar o chain id e nome usuário
+		.userDetailsService(userDetailsService);
+		
 	}
 }
 
