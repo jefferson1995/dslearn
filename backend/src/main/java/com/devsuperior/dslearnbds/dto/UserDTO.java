@@ -1,6 +1,8 @@
 package com.devsuperior.dslearnbds.dto;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.devsuperior.dslearnbds.entities.User;
 
@@ -10,6 +12,9 @@ public class UserDTO implements Serializable{
 	private long id;
 	private String name;
 	private String email;
+	
+	//Para transitar os dados do usuário e as permissões dele
+		Set<RoleDTO> roles = new HashSet<>();
 	
 	public UserDTO() {
 		
@@ -26,6 +31,7 @@ public class UserDTO implements Serializable{
 		id = entity.getId();
 		name = entity.getName();
 		email = entity.getEmail();
+		entity.getRoles().forEach(role -> this.roles.add(new RoleDTO(role)));
 	}
 
 	public long getId() {
@@ -44,6 +50,10 @@ public class UserDTO implements Serializable{
 		this.name = name;
 	}
 
+	public void setRoles(Set<RoleDTO> roles) {
+		this.roles = roles;
+	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -53,7 +63,10 @@ public class UserDTO implements Serializable{
 	}
 	
 	
-	
+	//Somente o getRoles para buscar as permissões vinculadas 
+		public Set<RoleDTO> getRoles() {
+			return roles;
+		}
 	
 	
 	

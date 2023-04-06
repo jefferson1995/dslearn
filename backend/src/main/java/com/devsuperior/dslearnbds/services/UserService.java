@@ -31,7 +31,7 @@ public class UserService implements UserDetailsService {
 	@Transactional(readOnly = true)
 	public UserDTO findById(Long id) {
 		
-		//Antes de fazer a opeção, faz a validação, se lançar exeção a requisição é suspensa
+		//Antes de fazer a operação, faz a validação, se lançar exeção a requisição é suspensa
 		authService.validateSelfOrAdmin(id);
 		
 		Optional<User> obj = repository.findById(id);
