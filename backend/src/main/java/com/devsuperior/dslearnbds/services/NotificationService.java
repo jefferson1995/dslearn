@@ -20,9 +20,9 @@ public class NotificationService {
 	private AuthService authService;
 	
 	//Método para buscar a notificação de um usuário especifico
-	public Page<NotificationDTO> notificationsForCurrentUser(Pageable pageable){
+	public Page<NotificationDTO> notificationsForCurrentUser(boolean unreadOnly, Pageable pageable){
 		User user = authService.authenticated(); //Busca user autenticado
-		Page<Notification> page = repository.findByUser(user, pageable); //Busca notficação paginada
+		Page<Notification> page = repository.find(user, unreadOnly, pageable); //Busca notficação paginada
 		return page.map(x -> new NotificationDTO(x));	
 	}
 }
